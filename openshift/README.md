@@ -46,7 +46,7 @@ hostname -f
   oc  cluster down
 ```
 
-### Replace server http://127.0.0.1:8443 to http://fqdn:8443
+### Replace server https://127.0.0.1:8443 to https://fqdn:8443
 ``` 
 vi ./openshift.local.clusterup/openshift-controller-manager/openshift-master.kubeconfig 
 ```  
