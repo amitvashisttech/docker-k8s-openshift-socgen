@@ -18,3 +18,23 @@
   126  history 10
   127  history 20
   128  history 20 > Day7_History.txt
+  134  git pull
+  135  git add . ; git commit -m "Day7_History.txt"; git push 
+  136  ls
+  137  oc get dc 
+  138  oc scale --replicas=3 dc myblog    
+  139  oc get dc 
+  140  history 
+  141  oc get pods 
+  142  oc new-app amitvashist7/blog-django-py --name myblog-green --env BLOG_BANNER_COLOR=green
+  143  oc expose svc/myblog-green
+  144  oc edit svc/myblog-green
+  145  oc get svc 
+  146  oc delete svc blog-django-py myblog           
+  147  oc get dc 
+  148  oc scale --replicas=3 dc myblog-green
+  149  ls
+  150  history 
+  151  history | 20
+  152  history 20
+  153  history 20 >> Day7_History.txt 
