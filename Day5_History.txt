@@ -1,0 +1,612 @@
+  878  kubectl create -f resourcequota.yml 
+  879  kubectl get ns 
+  880  kubectl get rs -n myspace
+  881  kubectl get pods  -n myspace
+  882  ls
+  883  vim helloworld-with-quotas.yml 
+  884  ls
+  885  kubectl create -f helloworld-with-quotas.yml 
+  886  kubectl get pods  -n myspace
+  887  kubectl get deployment  -n myspace
+  888  kubectl describe deployment helloworld-deployment  -n myspace
+  889  kubectl get pods  -n myspace
+  890  kubectl describe deployment helloworld-deployment  -n myspace
+  891  kubectl get rs -n myspace
+  892  kubectl describe rs helloworld-deployment-85bf5b749f -n myspace
+  893  ls
+  894  kubectl delete -f helloworld-with-quotas.yml 
+  895  ls
+  896  kubectl get rs -n myspace
+  897  ls
+  898  vim helloworld-no-quotas.yml 
+  899  ls
+  900  kubectl create -f helloworld-no-quotas.yml 
+  901  kubectl get rs -n myspace
+  902  kubectl get pods  -n myspace
+  903  kubectl get rs -n myspace
+  904  kubectl describe rs helloworld-deployment-5bc89f9946 -n myspace
+  905  kubectl delete -f helloworld-no-quotas.yml 
+  906  ls
+  907  vim defaults.yml 
+  908  ls
+  909  kubectl create -f defaults.yml 
+  910  kubectl  get limits -n myspace 
+  911  kubectl  get resourcequota -n myspace 
+  912  kubectl  describe  limits limits    -n myspace 
+  913  ls
+  914  kubectl create -f helloworld-no-quotas.yml 
+  915  kubectl get rs -n myspace
+  916  kubectl get pods  -n myspace
+  917  kubectl config get-contexts
+  918  kubectl config set-context --current --namespace=myspace
+  919  kubectl get pods 
+  920  kubectl get ns 
+  921  ls
+  922  kubectl get rs 
+  923  kubectl get deploy 
+  924  ls
+  925  kubectl get svc 
+  926  ls
+  927  cd docker-k8s-openshift-socgen/
+  928  ls
+  929  cd K8s/
+  930  ls
+  931  cd 19-ResourceQuotas/
+  932  ls
+  933  kubectl get deploy 
+  934  kubectl expose deploy helloworld-deployment --type=NodePort 
+  935  kubectl get svc 
+  936  kubectl run test-app-1 --image=amitvashist7/get-started:part2 --port=80
+  937  kubectl run test-app-2 --image=amitvashist7/get-started:part2 --port=80
+  938  ls
+  939  kubectl get deploy
+  940  kubectl scale --replicas=1 deploy helloworld-deployment
+  941  kubectl get pods 
+  942  kubectl run test-app-2 --image=amitvashist7/get-started:part2 --port=80
+  943  kubectl get deploy
+  944  kubectl run test-app-3 --image=amitvashist7/get-started:part2 --port=80
+  945  kubectl get pods 
+  946  kubectl  get svc 
+  947  kubectl expose pod test-app-1 --type=NodePort
+  948  kubectl expose pod test-app-3 --type=NodePort
+  949  kubectl get svc 
+  950  ls
+  951  cat resourcequota.yml 
+  952  ls
+  953  kubectl get svc 
+  954  kubectl edit svc helloworld-deployment 
+  955  ls
+  956  kubectl get svc 
+  957  kubectl edit svc test-app-1
+  958  kubectl get svc 
+  959  kubectl edit svc test-app-3
+  960  kubectl get svc 
+  961  kubectl delete svc helloworld-deployment test-app-1 test-app-3
+  962  ls
+  963  kubectl get pods 
+  964  kubectl delete pod test-app-1 test-app-3
+  965  kubectl delete deploy helloworld-deployment-5bc89f9946-hwlzh
+  966  kubectl delete deploy helloworld-deployment
+  967  ls
+  968  kubectl config set-context --current --namespace=default
+  969  ls
+  970  kubectl get limits
+  971  ls
+  972  cd ..
+  973  ls
+  974  cd ..
+  975  ls
+  976  history 
+  977  history 100
+  978  history 100 | more
+  979  cd docker-k8s-openshift-socgen/
+  980  ls
+  981  git add . ; git commit -m "ResourceQuota"; git push 
+  982  fc -l 
+  983  fc -l 100
+  984  ls
+  985  cat Day5_History.txt 
+  986  ls
+  987  history 120
+  988  history 
+  989  history ls
+  990  ls
+  991  cd k8s-docker-vmware_15April2020/
+  992  ls
+  993  cd ..
+  994  ls
+  995  cd docker-k8s-openshift-socgen/
+  996  ls
+  997  history 120 > Day5_History.txt 
+    1  ls
+    2  cat Day5_History.txt 
+    3  ls
+    4  history 120
+    5  kubectl get ns 
+    6  kubectl config view --minify| grep namespaces:
+    7  kubectl config view --minify
+    8  kubectl config set-context --current --namespace=myspace
+    9  kubectl config view --minify| grep namespaces:
+   10  kubectl config view --minify| grep namespaces
+   11  kubectl config view --minify| grep -i namespaces
+   12  kubectl config get-contexts
+   13  kubectl config set-context --current --namespace=default
+   14  kubectl config get-contexts
+   15  history 
+   16  ls
+   17  cd K8s/
+   18  ls
+   19  cd 04-Deployment/
+   20  ls
+   21  kubectl create -f helloworld.yml 
+   22  kubectl get pods 
+   23  kubectl get pods -o wide 
+   24  kubectl get nodes 
+   25  kubectl scale --replicas=10 deploy helloworld-deployment
+   26  kubectl get pods -o wide 
+   27  kubectl get nodes 
+   28  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m
+   29  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m --ignore-daemonsets
+   30  kubectl get nodes 
+   31  kubectl scale --replicas=15 deploy helloworld-deployment
+   32  ls
+   33  kubectl describe pod helloworld-deployment-7857f49c7d-fm9vw
+   34  kubectl scale --replicas=5 deploy helloworld-deployment
+   35  kubectl get nodes 
+   36  kubectl scale --replicas=3 deploy helloworld-deployment
+   37  kubectl scale --replicas=5 deploy helloworld-deployment
+   38  kubectl uncordon gke-k8s-demo-default-pool-e00f1f35-gd0m
+   39  kubectl get nodes 
+   40  kubectl scale --replicas=10 deploy helloworld-deployment
+   41  ls
+   42  history 
+   43  cd ..
+   44  ls
+   45  cd ..
+   46  ls
+   47  history >> Day5_History.txt 
+    1  ls
+    2  cat Day5_History.txt 
+    3  ls
+    4  history 120
+    5  kubectl get ns 
+    6  kubectl config view --minify| grep namespaces:
+    7  kubectl config view --minify
+    8  kubectl config set-context --current --namespace=myspace
+    9  kubectl config view --minify| grep namespaces:
+   10  kubectl config view --minify| grep namespaces
+   11  kubectl config view --minify| grep -i namespaces
+   12  kubectl config get-contexts
+   13  kubectl config set-context --current --namespace=default
+   14  kubectl config get-contexts
+   15  history 
+   16  ls
+   17  cd K8s/
+   18  ls
+   19  cd 04-Deployment/
+   20  ls
+   21  kubectl create -f helloworld.yml 
+   22  kubectl get pods 
+   23  kubectl get pods -o wide 
+   24  kubectl get nodes 
+   25  kubectl scale --replicas=10 deploy helloworld-deployment
+   26  kubectl get pods -o wide 
+   27  kubectl get nodes 
+   28  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m
+   29  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m --ignore-daemonsets
+   30  kubectl get nodes 
+   31  kubectl scale --replicas=15 deploy helloworld-deployment
+   32  ls
+   33  kubectl describe pod helloworld-deployment-7857f49c7d-fm9vw
+   34  kubectl scale --replicas=5 deploy helloworld-deployment
+   35  kubectl get nodes 
+   36  kubectl scale --replicas=3 deploy helloworld-deployment
+   37  kubectl scale --replicas=5 deploy helloworld-deployment
+   38  kubectl uncordon gke-k8s-demo-default-pool-e00f1f35-gd0m
+   39  kubectl get nodes 
+   40  kubectl scale --replicas=10 deploy helloworld-deployment
+   41  ls
+   42  history 
+   43  cd ..
+   44  ls
+   45  cd ..
+   46  ls
+   47  history >> Day5_History.txt 
+   48  git add . ; git commit -m "NodeDrain"; git push 
+   49  ls
+   50  cd ..
+   51  ls
+   52  cd docker-k8s-openshift-socgen/K8s/
+   53  ls
+   54  mkdir 20-Helm
+   55  ls
+   56  cd 20-Helm/
+   57  ls
+   58  vim README.md
+   59  ls
+   60  vim helm-tiller-rbac.yaml
+   61  ls
+   62  cat README.md 
+   63  wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+   64  ls
+   65  tar -xzvf helm-v2.11.0-linux-amd64.tar.gz
+   66  sudo mv linux-amd64/helm /usr/local/bin/helm
+   67  ls
+   68  rm -rf helm-v2.11.0-linux-amd64.tar.gz linux-amd64
+   69  ls
+   70  helm --help
+   71  ls
+   72  vim helm-tiller-rbac.yaml 
+   73  ls
+   74  kubectl create -f helm-tiller-rbac.yaml 
+   75  kubectl get pods -n kube-system
+   76  ls
+   77  cat README.md 
+   78  helm init --service-account tiller
+   79  kubectl get pods -n kube-system
+   80  ls
+   81  helm --help
+   82  helm list 
+   83  helm search redis
+   84  helm install stable/redis
+   85  kubectl get pods 
+   86  kubectl delete deploy helloworld-deployment
+   87  kubectl get pods 
+   88  kubectl run --namespace default cold-orangutan-redis-client --rm --tty -i --restart='Never'     --env REDIS_PASSWORD=$REDIS_PASSWORD    --image docker.io/bitnami/redis:5.0.7-debian-10-r32 -- bash
+   89  helm list 
+   90  helm inspect
+   91  helm inspect cold-orangutan
+   92  ls
+   93  helm inspect radis/stable
+   94  ls
+   95  helm inspect
+   96  helm list 
+   97  helm inspect redis-10.5.7
+   98  helm --help
+   99  helm list 
+  100  helm list cold-orangutan
+  101  helm inspect cold-orangutan
+  102  helm inspect chart cold-orangutan
+  103  helm repo update
+  104  helm list cold-orangutan
+  105  helm inspect  cold-orangutan
+  106  helm inspect redis-10.5.7
+  107  helm status redis-10.5.7
+  108  helm status cold-orangutan
+  109  helm install -n myradis stable/redis
+  110  kubectl get pods 
+  111  helm list 
+  112  helm status myradis         
+  113  ls
+  114  helm delete myradis         
+  115  helm list 
+  116  helm delete cold-orangutan
+  117  ls
+  118  history 
+  119  vim README.md 
+  120  s
+  121  ls
+  122  cat README.md 
+  123  ls
+  124  cd ..
+  125  ls
+  126  cd ..
+  127  ls
+  128  git add . ; git commit -m "20-Helm"; git push 
+  129  ls
+  130  history 
+  131  history >> Day5_History.txt 
+    1  ls
+    2  cat Day5_History.txt 
+    3  ls
+    4  history 120
+    5  kubectl get ns 
+    6  kubectl config view --minify| grep namespaces:
+    7  kubectl config view --minify
+    8  kubectl config set-context --current --namespace=myspace
+    9  kubectl config view --minify| grep namespaces:
+   10  kubectl config view --minify| grep namespaces
+   11  kubectl config view --minify| grep -i namespaces
+   12  kubectl config get-contexts
+   13  kubectl config set-context --current --namespace=default
+   14  kubectl config get-contexts
+   15  history 
+   16  ls
+   17  cd K8s/
+   18  ls
+   19  cd 04-Deployment/
+   20  ls
+   21  kubectl create -f helloworld.yml 
+   22  kubectl get pods 
+   23  kubectl get pods -o wide 
+   24  kubectl get nodes 
+   25  kubectl scale --replicas=10 deploy helloworld-deployment
+   26  kubectl get pods -o wide 
+   27  kubectl get nodes 
+   28  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m
+   29  kubectl drain gke-k8s-demo-default-pool-e00f1f35-gd0m --ignore-daemonsets
+   30  kubectl get nodes 
+   31  kubectl scale --replicas=15 deploy helloworld-deployment
+   32  ls
+   33  kubectl describe pod helloworld-deployment-7857f49c7d-fm9vw
+   34  kubectl scale --replicas=5 deploy helloworld-deployment
+   35  kubectl get nodes 
+   36  kubectl scale --replicas=3 deploy helloworld-deployment
+   37  kubectl scale --replicas=5 deploy helloworld-deployment
+   38  kubectl uncordon gke-k8s-demo-default-pool-e00f1f35-gd0m
+   39  kubectl get nodes 
+   40  kubectl scale --replicas=10 deploy helloworld-deployment
+   41  ls
+   42  history 
+   43  cd ..
+   44  ls
+   45  cd ..
+   46  ls
+   47  history >> Day5_History.txt 
+   48  git add . ; git commit -m "NodeDrain"; git push 
+   49  ls
+   50  cd ..
+   51  ls
+   52  cd docker-k8s-openshift-socgen/K8s/
+   53  ls
+   54  mkdir 20-Helm
+   55  ls
+   56  cd 20-Helm/
+   57  ls
+   58  vim README.md
+   59  ls
+   60  vim helm-tiller-rbac.yaml
+   61  ls
+   62  cat README.md 
+   63  wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+   64  ls
+   65  tar -xzvf helm-v2.11.0-linux-amd64.tar.gz
+   66  sudo mv linux-amd64/helm /usr/local/bin/helm
+   67  ls
+   68  rm -rf helm-v2.11.0-linux-amd64.tar.gz linux-amd64
+   69  ls
+   70  helm --help
+   71  ls
+   72  vim helm-tiller-rbac.yaml 
+   73  ls
+   74  kubectl create -f helm-tiller-rbac.yaml 
+   75  kubectl get pods -n kube-system
+   76  ls
+   77  cat README.md 
+   78  helm init --service-account tiller
+   79  kubectl get pods -n kube-system
+   80  ls
+   81  helm --help
+   82  helm list 
+   83  helm search redis
+   84  helm install stable/redis
+   85  kubectl get pods 
+   86  kubectl delete deploy helloworld-deployment
+   87  kubectl get pods 
+   88  kubectl run --namespace default cold-orangutan-redis-client --rm --tty -i --restart='Never'     --env REDIS_PASSWORD=$REDIS_PASSWORD    --image docker.io/bitnami/redis:5.0.7-debian-10-r32 -- bash
+   89  helm list 
+   90  helm inspect
+   91  helm inspect cold-orangutan
+   92  ls
+   93  helm inspect radis/stable
+   94  ls
+   95  helm inspect
+   96  helm list 
+   97  helm inspect redis-10.5.7
+   98  helm --help
+   99  helm list 
+  100  helm list cold-orangutan
+  101  helm inspect cold-orangutan
+  102  helm inspect chart cold-orangutan
+  103  helm repo update
+  104  helm list cold-orangutan
+  105  helm inspect  cold-orangutan
+  106  helm inspect redis-10.5.7
+  107  helm status redis-10.5.7
+  108  helm status cold-orangutan
+  109  helm install -n myradis stable/redis
+  110  kubectl get pods 
+  111  helm list 
+  112  helm status myradis         
+  113  ls
+  114  helm delete myradis         
+  115  helm list 
+  116  helm delete cold-orangutan
+  117  ls
+  118  history 
+  119  vim README.md 
+  120  s
+  121  ls
+  122  cat README.md 
+  123  ls
+  124  cd ..
+  125  ls
+  126  cd ..
+  127  ls
+  128  git add . ; git commit -m "20-Helm"; git push 
+  129  ls
+  130  history 
+  131  history >> Day5_History.txt 
+  132  git add . ; git commit -m "20-Helm"; git push 
+  133  ls
+  134  cd K8s/
+  135  ls
+  136  cd 20-Helm/
+  137  ls
+  138  mkdir mydev
+  139  ls
+  140  cd mydev/
+  141  ls
+  142  helm create mychart
+  143  ls
+  144  ls -R mychart/
+  145  ls
+  146  cd mychart/
+  147  ls
+  148  ls -lr charts/
+  149  cat Chart.yaml 
+  150  ls
+  151  cat values.yaml 
+  152  ls
+  153  cd templates/
+  154  ls
+  155  ll
+  156  cat deployment.yaml 
+  157  ls
+  158  cd ..
+  159  ls
+  160  cd ..
+  161  ls
+  162  helm install --dry-run --debug ./mychart/
+  163  helm install --dry-run --debug ./mychart/ --set service.type=LoadBalancer
+  164  helm install -n exp1 ./mychart
+  165  kubectl get svc 
+  166  helm install -n exp2 ./mychart--set service.type=NodePort
+  167  ls
+  168  helm install -n exp2 ./mychart--set service.type=NodePort
+  169  helm install -n exp2 ./mychart --set service.type=NodePort
+  170  kubectl get svc 
+  171  helm install -n exp3 ./mychart --set service.type=Loadbalancer
+  172  helm install -n exp3 ./mychart --set service.type=LoadBalancer
+  173  helm install -n exp4 ./mychart --set service.type=LoadBalancer
+  174  kubectl get svc 
+  175  ls
+  176  cd mychart/
+  177  cd ..
+  178  ls
+  179  vim mychart/values.yaml 
+  180  ls
+  181  helm install -n exp5 ./mychart --set service.type=LoadBalancer
+  182  kubectl get svc 
+  183  kubectl get pods 
+  184  curl http://35.188.9.162/
+  185  ls
+  186  helm package ./mychart
+  187  ls
+  188  helm install -n exp6 mychart-0.1.0.tgz --set service.type=LoadBalancer
+  189  ls
+  190  kubectl get svc 
+  191  kubectl get pods 
+  192  kubectl get svc 
+  193  kubectl get pods 
+  194  curl 4.70.18.188
+  195  curl 34.70.18.188
+  196  ls
+  197  helm serve
+  198  ls
+  199  cd ..
+  200  ls
+  201  cd ..
+  202  ls
+  203  helm list 
+  204  helm list | awk -F "print $1"
+  205  helm list | awk -F" " {print $1}
+  206  helm list | awk -F" " "{print $1}"
+  207  helm list | awk -F" " '{print $1}'
+  208  helm delete $(helm list | awk -F" " '{print $1}')
+  209  helm delete $(helm list | awk -F" " '{print $1}|grep -v "NAME"')
+  210  helm delete $(helm list | awk -F" " '{print $1}'|grep -v "NAME")
+  211  ls
+  212  cd ..
+  213  ls
+  214  history >> Day5_History.txt 
+ 1027  ls
+ 1028  cd docker-k8s-openshift-socgen/
+ 1029  ls
+ 1030  cd K8s/
+ 1031  ls
+ 1032  kubectl version
+ 1033  ls
+ 1034  cd 20-Helm/
+ 1035  ls
+ 1036  cat README.md 
+ 1037  vi README.md 
+ 1038  ls
+ 1039  cd mydev/
+ 1040  ls
+ 1041  helm repo add bitnami https://charts.bitnami.com/bitnami
+ 1042  helm pull https://charts.bitnami.com/bitnami
+ 1043  helm pull bitnami/wordpress
+ 1044  helm  --help 
+ 1045  helm get bitnami/wordpress
+ 1046  ls
+ 1047  helm create testchart
+ 1048  ls
+ 1049  helm  install --dry-run --debug ./testchart 
+ 1050  ls
+ 1051  cat testchart/values.yaml 
+ 1052  ls
+ 1053  cp -rf testchart/values.yaml . 
+ 1054  ls
+ 1055  echo "Hello World" >> testchart/values.yaml 
+ 1056  ls
+ 1057  helm lint ./mychart
+ 1058  helm lint ./testchart
+ 1059  vim testchart/values.yaml 
+ 1060  helm lint ./testchart
+ 1061  vim testchart/values.yaml 
+ 1062  helm lint ./testchart
+ 1063  ls
+ 1064  cd testchart/
+ 1065  ls
+ 1066  vim requirements.yaml
+ 1067  ls
+ 1068  cd ..
+ 1069  ls
+ 1070  helm  dep update ./testchart/
+ 1071  ls
+ 1072  cd testchart/
+ 1073  ls
+ 1074  cd charts/
+ 1075  ls
+ 1076  cd .
+ 1077  cd ..
+ 1078  ls
+ 1079  vim requirements.yaml 
+ 1080  helm  dep update ./testchart/
+ 1081  ls
+ 1082  cd ..
+ 1083  helm  dep update ./testchart/
+ 1084  helm search bitnami/wordpress
+ 1085  ls
+ 1086  vim testchart/requirements.yaml 
+ 1087  ls
+ 1088  helm  dep update ./testchart/
+ 1089  ls
+ 1090  cd testchart/charts/
+ 1091  ls
+ 1092  cp -rf wordpress-9.3.3.tgz ../../ls
+ 1093  cp -rf wordpress-9.3.3.tgz ../../
+ 1094  ls
+ 1095  cd ../../
+ 1096  ls
+ 1097  tar -zxvf wordpress-9.3.3.tgz 
+ 1098  ls
+ 1099  cd wordpress/
+ 1100  ls
+ 1101  vim values.yaml 
+ 1102  ls
+ 1103  cd ..
+ 1104  ls
+ 1105  helm install -n wordpress-test ./wordpress
+ 1106  kubectl  get svc 
+ 1107  echo Password: $(kubectl get secret --namespace default wordpress-test -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+ 1108  kubectl  get svc 
+ 1109  kubectl get pods 
+ 1110  ls
+ 1111  helm serve
+ 1112  ls
+ 1113  cd ..
+ 1114  ls
+ 1115  cd .
+ 1116  ls
+ 1117  du -sh mydev
+ 1118  ls
+ 1119  cd ..
+ 1120  ls
+ 1121  history 
+ 1122  ls
+ 1123  cd ..
+ 1124  ls
+ 1125  history 100
+ 1126  history 100 >> Day5_History.txt 

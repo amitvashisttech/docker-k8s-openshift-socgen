@@ -1,0 +1,62 @@
+    1  git clone https://github.com/amitvashisttech/k8s-docker-vmware_15April2020.git
+    2  ls
+    3  git clone https://github.com/amitvashisttech/k8s-docker-vmware_15April2020.git
+    4  git clone https://github.com/amitvashisttech/docker-k8s-openshift-socgen.git
+    5  ls
+    6  cd docker-k8s-openshift-socgen/
+    7  ls
+    8  mkdir  K8s/ 
+    9  ls
+   10  cd K8s/
+   11  ls
+   12  cp -rf ../../k8s-docker-vmware_15April2020/K8s/01-Setup . 
+   13  cp -rf ../../k8s-docker-vmware_15April2020/K8s/02-First-App . 
+   14  ls
+   15  cd 01-Setup/
+   16  ls
+   17  vim install-kubernetes.sh 
+   18  cd ..
+   19  ls
+   20  git add . ; git commit -m "K8s-Setup" ; git push 
+   21  ls
+   22  cd 01-Setup/
+   23  ls
+   24  ./install-kubernetes.sh 
+   25  mkdir -p $HOME/.kube
+   26  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   27  chown $(id -u):$(id -g) $HOME/.kube/config
+   28  kubectl get nodes 
+   29  docker ps 
+   30  ls
+   31  kubectl get nodes 
+   32  kubectl get pods -n kube-system
+   33  kubectl delete pods  -n kube-system
+   34  kubectl delete pods calico-node-6fn9j -n kube-system
+   35  kubectl delete pods  -n kube-system
+   36  kubectl get pods -n kube-system
+   37  kubectl get nodes 
+   38  ls
+   39  cat install-kubernetes.sh 
+   40  kubectl get nodes 
+   41  ls
+   42  cd ..
+   43  ls
+   44  cd 02-First-App/
+   45  ls
+   46  cat helloworld.yml 
+   47  kubectl get nodes
+   48  kubectl get pods 
+   49  kubectl get ns 
+   50  kubectl get pods 
+   51  kubectl create -f helloworld.yml
+   52  kubectl get pods 
+   53  vim /root/.kube/config 
+   54  kubectl get pods 
+   55  kubectl desribe pods nodehelloworld   
+   56  kubectl describe pods nodehelloworld   
+   57  ls
+   58  cd ..
+   59  ls
+   60  cd ..
+   61  ls
+   62  history > Day2_History.txt

@@ -1,0 +1,262 @@
+    1  exit
+    2  cat /etc/apt/sources.list
+    3  vim /etc/apt/sources.list
+    4  ls
+    5  git clone https://github.com/amitvashisttech/k8s-docker-vmware_15April2020.git
+    6  ls
+    7  cd k8s-docker-vmware_15April2020/
+    8  ls
+    9  mkdir Docker
+   10  ls
+   11  docker ps 
+   12  docker ps -a
+   13  docker images 
+   14  docker run -it ubuntu 
+   15  docker ps 
+   16  docker ps -a
+   17  cat /etc/*-release
+   18  docker run -it ubuntu 
+   19  docker ps 
+   20  docker ps -a
+   21  docker start 84336bb2aea5
+   22  docker ps 
+   23  docker ps
+   24  docker attach 84336bb2aea5
+   25  docker ps 
+   26  docker inspect 84336bb2aea5
+   27  curl 172.17.0.5
+   28  docker ps 
+   29  docker attach 47ecf62ea7a2
+   30  docker ps | grep -i 47ecf62ea7a2
+   31  docker ps -a | grep -i 47ecf62ea7a2
+   32  docker start 47ecf62ea7a2
+   33  docker ps | grep -i 47ecf62ea7a2
+   34  docker attach 47ecf62ea7a2
+   35  docker ps 
+   36  docker attach 84336bb2aea5
+   37  curl 172.17.0.5
+   38  curl 172.17.0.5/info.html
+   39  ip addr 
+   40  docker images 
+   41  docker search centos/7
+   42  docker search centos
+   43  docker search centos/7
+   44  docker pull centos/7
+   45  docker pull centos
+   46  docker pull centos:7
+   47  docker images 
+   48  docker run -it centos:7 
+   49  curl 172.17.0.4
+   50  ls
+   51  cd Docker/
+   52  ls
+   53  history > Day_1_Histroy.txt
+   54  ls
+   55  cd ..
+   56  ls
+   57  git add . ; git commit -m "Day1_History.txt"
+   58  git push 
+   59  ls
+   60  cd Docker/
+   61  ls
+   62  cat Day_1_Histroy.txt 
+   63  docker ps 
+   64  docker attach 62671e4ac3cd
+   65  docker inspect 62671e4ac3cd
+   66  curl 172.17.0.4
+   67  docker ps 
+   68  docker imags 
+   69  docker images
+   70  docker commit -p -m "My First Apache CentOS" 62671e4ac3cd myapache-centos-7:v1
+   71  docker images
+   72  curl 172.17.0.4
+   73  docker run -itd myapache-centos-7:v1
+   74  docker ps 
+   75  docker ps -l 
+   76* doc
+   77  docker inspect $(docker ps -lq)
+   78  curl 172.17.0.6
+   79  docker images 
+   80  docker ps 
+   81  docker attach 794c4cbf226e
+   82  curl 172.17.0.6
+   83  docker ps 
+   84  docker commit -p -m "My First Apache CentOS" 794c4cbf226e myapache-centos-7:v2
+   85  docker ps 
+   86  docker images 
+   87  docker ps -aq
+   88  docker ps -q
+   89  docker kill $(docker ps -q)
+   90  docker ps 
+   91  docker images
+   92  docker run -itd myapache-centos-7:v2
+   93  docker ps 
+   94  curl 172.17.0.2
+   95  curl 172.17.0.3
+   96  curl 172.17.0.4
+   97  docker run -itd myapache-centos-7:v1
+   98  curl 172.17.0.5
+   99  ls
+  100  history > Day_1_Histroy.txt 
+  101  cd ../
+  102  git add . ; git commit -m "Day_1_Histroy.txt"; git push 
+  103  docker ps -a 
+  104  docker ps -aq
+  105  docker rm $(docker ps -aq)
+  106  docker ps -aq
+  107  docker ps -a
+  108  cd /var/lib/docker
+  109  ls
+  110  cd containers/
+  111  ls
+  112  cd ..
+  113  ls
+  114  docker images 
+  115  cd 
+  116  ls
+  117  cd k8s-docker-vmware_15April2020/
+  118  ls
+  119  cd Docker/
+  120  ls
+  121  docker pull amitvashist7/k8s-tiny-web
+  122  docker images 
+  123  ls
+  124  mkdir DockerFile 
+  125  ls
+  126  cd DockerFile/
+  127  ls
+  128  vim Dockerfile
+  129  lsw
+  130  ls
+  131  vim amit.html
+  132  ls
+  133  file Dockerfile 
+  134  docker images 
+  135  docker build -t myapache-ubuntu-16-04:v1 .
+  136  ls
+  137  docker images 
+  138  docker run -d myapache-ubuntu-16-04:v1
+  139  docker ps 
+  140  docker inspect cd57cb68e58f
+  141  curl 172.17.0.6
+  142  curl 172.17.0.6/info.html
+  143  ls
+  144  cd ..
+  145  ls
+  146  history > Day_1_Histroy.txt
+  147  cd ..
+  148  ls
+  149  git add . ; git commit -m "DockerFile"; git push 
+  150  ls
+  151  docker images 
+  152  docker history myapache-ubuntu-16-04:v1
+  153  docker inspect myapache-ubuntu-16-04:v1
+  154  ls
+  155  docker images 
+  156  docker myapache-ubuntu-16-04:v1 history --no-trunc
+  157  docker image history --no-trunc  myapache-ubuntu-16-04:v1
+  158  docker image history --no-trunc  myapache-ubuntu-16-04:v1 > image_hist
+  159  cat image_hist 
+  160  vim image_hist 
+  161  docker history myapache-ubuntu-16-04:v1 > image_hist
+  162  vim image_hist 
+  163  docker ps 
+  164  docker run -d -p 8080:80 myapache-ubuntu-16-04:v1
+  165  docker ps 
+  166  curl localhost
+  167  curl localhost:8080
+  168  curl localhost:8080/info.html
+  169  docker ps 
+  170  netstat -tulnp 
+  171  netstat -tulnp | grep -i docker
+  172  docker ps 
+  173  docker run -itd -p 8081:80 myapache-centos-7:v2 
+  174  docker ps 
+  175  history 
+  176  curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  177  chmod +x /usr/local/bin/docker-compose
+  178  cd 
+  179  docker-compose version 
+  180  ls
+  181  docker ps -aq 
+  182  ls
+  183  docker kill $(docker ps -aq)
+  184  docker ps 
+  185  ls
+  186  cd k8s-docker-vmware_15April2020/
+  187  ls
+  188  cd Docker/
+  189  ls
+  190  mkdir DockerCompose
+  191  cd DockerCompose/
+  192  ls
+  193  mkdir apache wordpress
+  194  ls
+  195  cd apache/
+  196  ls
+  197  docker images 
+  198  ls
+  199  vim docker-compose.yaml
+  200  docker images 
+  201  vim docker-compose.yaml
+  202  docker ps 
+  203  docker-compose up -d 
+  204  docker ps 
+  205  cat docker-compose.yaml 
+  206  docker ps 
+  207  docker-compose ps 
+  208  docker-compose stop 
+  209  ls
+  210  docker-compose rm 
+  211  cd ..
+  212  ls
+  213  cd wordpress/
+  214  ls
+  215  vim docker-compose.yaml
+  216  ls
+  217  mkdir nginx
+  218  vim wordpress.conf
+  219  ls
+  220  vim wordpress.conf 
+  221  ls
+  222  vim docker-compose.yaml 
+  223  ls
+  224  mv wordpress.conf nginx/
+  225  ls
+  226  docker-compose up -d 
+  227  docker-compose ps 
+  228  ls 
+  229  cd wordpress/
+  230  ls
+  231  cd ..
+  232  ls
+  233  tail -f logs/nginx/hakase-access.log
+  234  cd 
+  235  cd - 
+  236  ls
+  237  cd ..
+  238  ls
+  239  cd ..
+  240  ls
+  241  cd ..
+  242  ls
+  243  docker run -it -v Docker:/var/www/Docker ubuntu:16.04
+  244  docker run -it -v ./Docker:/var/www/Docker ubuntu:16.04
+  245  cd Docker/
+  246  pwd
+  247  cd ..
+  248  ls
+  249  docker run -it -v /root/k8s-docker-vmware_15April2020/Docker:/var/www/Docker ubuntu:16.04
+  250  docker rm 2bdbb744026c
+  251  ls
+  252  cat image_hist 
+  253  ls
+  254  cd Docker/
+  255  ls
+  256  cat container_info.txt 
+  257  docker run -it -v /root/k8s-docker-vmware_15April2020/Docker:/var/www/Docker ubuntu:16.04
+  258  docker ps 
+  259  cat container_info.txt 
+  260  docker run -it -v /root/k8s-docker-vmware_15April2020/Docker:/var/www/Docker:ro ubuntu:16.04
+  261  ls
+  262  history > Day_1_Histroy.txt 

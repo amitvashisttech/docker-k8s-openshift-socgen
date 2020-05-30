@@ -1,0 +1,13 @@
+---
+
+mytest-cont:
+  image: amitvashist7/k8s-tiny-web:latest
+  ports:
+    - '8082:80' 
+
+
+
+myprod-cont:
+  image: amitvashist7/k8s-tiny-web:latest
+  ports:
+    - '8089:80' 

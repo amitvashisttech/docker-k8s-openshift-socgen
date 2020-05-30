@@ -1,0 +1,110 @@
+ 1062  ls
+ 1063  history 
+ 1064  history 100
+ 1065  history 50
+ 1066  history 60
+ 1067  history 60 | more 
+ 1068  history 60  >> Day4_History.txt 
+ 1069  git add . ; git commit -m "16-Statefullset-Cass"; git push 
+ 1070  ls
+ 1071  kubectl delete pvc --all 
+ 1072  kubectl delete pv --all 
+ 1073  ls
+ 1074  cd K8s/
+ 1075  ls
+ 1076  cp -rf ../../k8s-docker-vmware_15April2020/K8s/14-Metrics-server 17-Metrics-server
+ 1077  cp -rf ../../k8s-docker-vmware_15April2020/K8s/15-Autoscaling 18-Autoscaling
+ 1078  ls
+ 1079  cd 17-Metrics-server/
+ 1080  ls
+ 1081  cd ..
+ 1082  ls
+ 1083  kubectl get pods -n kube-system
+ 1084  kubectl top 
+ 1085  kubectl top pod 
+ 1086  kubectl top nodes 
+ 1087  ls
+ 1088  cd 18-Autoscaling/
+ 1089  ls
+ 1090  vim hpa-example.yml 
+ 1091  ls
+ 1092  kubectl create -f hpa-example.yml 
+ 1093  kubectl get svc,deployment,hpa
+ 1094  kubectl get pods 
+ 1095  kubectl get svc 
+ 1096  kubectl edit svc hpa-example
+ 1097  kubectl get svc 
+ 1098  kubectl top pods 
+ 1099  kubectl top nodes 
+ 1100  kubectl top pod
+ 1101  ls
+ 1102  kubectl top pod
+ 1103  kubectl get pods 
+ 1104  kubectl top pod
+ 1105  watch -n .5 kubectl get pods 
+ 1106  watch -n .5 kubectl get pods  -o wide 
+ 1107  sl
+ 1108  ls
+ 1109  cd ..
+ 1110  ls
+ 1111  history 50 > ../Day4_History.txt 
+ 1062  ls
+ 1063  history 
+ 1064  history 100
+ 1065  history 50
+ 1066  history 60
+ 1067  history 60 | more 
+ 1068  history 60  >> Day4_History.txt 
+ 1069  git add . ; git commit -m "16-Statefullset-Cass"; git push 
+ 1070  ls
+ 1071  kubectl delete pvc --all 
+ 1072  kubectl delete pv --all 
+ 1073  ls
+ 1074  cd K8s/
+ 1075  ls
+ 1076  cp -rf ../../k8s-docker-vmware_15April2020/K8s/14-Metrics-server 17-Metrics-server
+ 1077  cp -rf ../../k8s-docker-vmware_15April2020/K8s/15-Autoscaling 18-Autoscaling
+ 1078  ls
+ 1079  cd 17-Metrics-server/
+ 1080  ls
+ 1081  cd ..
+ 1082  ls
+ 1083  kubectl get pods -n kube-system
+ 1084  kubectl top 
+ 1085  kubectl top pod 
+ 1086  kubectl top nodes 
+ 1087  ls
+ 1088  cd 18-Autoscaling/
+ 1089  ls
+ 1090  vim hpa-example.yml 
+ 1091  ls
+ 1092  kubectl create -f hpa-example.yml 
+ 1093  kubectl get svc,deployment,hpa
+ 1094  kubectl get pods 
+ 1095  kubectl get svc 
+ 1096  kubectl edit svc hpa-example
+ 1097  kubectl get svc 
+ 1098  kubectl top pods 
+ 1099  kubectl top nodes 
+ 1100  kubectl top pod
+ 1101  ls
+ 1102  kubectl top pod
+ 1103  kubectl get pods 
+ 1104  kubectl top pod
+ 1105  watch -n .5 kubectl get pods 
+ 1106  watch -n .5 kubectl get pods  -o wide 
+ 1107  sl
+ 1108  ls
+ 1109  cd ..
+ 1110  ls
+ 1111  history 50 > ../Day4_History.txt 
+ 1112  ls
+ 1113  cd .
+ 1114  ls
+ 1115  git add . ; git commit -m "18-Autoscaling"; git push 
+ 1116  ls
+ 1117  history 
+ 1118  cd ..
+ 1119  ls
+ 1120  history 60 
+ 1121  history 60 >> Day4_History.txt 

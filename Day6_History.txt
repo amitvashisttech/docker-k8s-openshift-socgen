@@ -1,0 +1,158 @@
+   27  kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin  --user=$(gcloud config get-value core/account)
+   28  ls
+   29  kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml 
+   30  ls
+   31  kubectl get ns 
+   32  kubectl apply -f install/kubernetes/istio-demo.yaml 
+   33  kubectl get ns 
+   34  kubectl get svc,pod -n istio-system
+   35  ls
+   36  cat samples/bookinfo/platform/kube/bookinfo.yaml 
+   37  kubectl apply -f  samples/bookinfo/platform/kube/bookinfo.yaml 
+   38  ls
+   39  kubectl get svc 
+   40  kubectl get pods 
+   41  ls
+   42  cat samples/bookinfo/networking/bookinfo-gateway.yaml 
+   43  kubectl  get svc 
+   44  kubectl apply -f  samples/bookinfo/networking/bookinfo-gateway.yaml 
+   45  kubectl get gateway
+   46  kubectl get virtualservice 
+   47  kubectl get svc,pod -n istio-system
+   48  kubectl get virtualservice 
+   49  kubectl describe virtualservice 
+   50  ls
+   51  kubectl get pods 
+   52  ls
+   53  kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml 
+   54  kubectl apply -f <(istioctl samples/bookinfo/platform/kube/bookinfo.yaml)
+   55  ls
+   56  cd bin/
+   57  kubectl apply -f <(istioctl samples/bookinfo/platform/kube/bookinfo.yaml)
+   58  ls
+   59  cd ..
+   60  ls
+   61  kubectl apply -f <(istioctl samples/bookinfo/platform/kube/bookinfo.yaml)
+   62  kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml)
+   63  kubectl get pods 
+   64  kubectl describe pod details-v1-84f4499c5d-9cxt7
+   65  ls
+   66  kubectl get svc 
+   67  ls
+   68  cd ..
+   69  ls
+   70  cd docker-k8s-openshift-socgen/
+   71  ls
+   72  history 
+   73  history > Day6_History.txt
+   74  git add . ; git commit -m "Istio-Install"; git push 
+   75  ls
+   76  cd K8s/21-Istio/
+   77  ls
+   78  cp -rf ../../../old/kubernetes-project/istio/helloworld.yaml . 
+   79  cp -rf ../../../old/kubernetes-project/istio/helloworld-gw.yaml . 
+   80  ls
+   81  vim helloworld.yaml 
+   82  ls
+   83  cd ..
+   84  ls
+   85  cat README.md 
+   86  ls
+   87  mv README.md 21-Istio/
+   88  ls
+   89  cd ..
+   90  l
+   91  sls
+   92  ls
+   93  cd K8s/
+   94  ls
+   95  cd ..
+   96  ls
+   97  git add . ; git commit -m "21-Istio"; git push 
+   98  ls
+   99  cd K8s/
+  100  ls
+  101  cd 21-Istio/
+  102  ls
+  103  vim helloworld.yaml 
+  104  ls
+  105  kubectl get pods 
+  106  cd ../../
+  107  ls
+  108  cd 
+  109  ls
+  110  cd istio-1.0.2/
+  111  ls
+  112  kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
+  113  kubectl delete -f samples/bookinfo/networking/bookinfo-gateway.yaml 
+  114  ls
+  115  cd 
+  116  ls
+  117  cd docker-k8s-openshift-socgen/K8s/21-Istio/
+  118  ls
+  119  vim helloworld.yaml 
+  120  ls
+  121  kubectl get ns -L istio-injection
+  122  kubectl label ns default istio-injection=enabled
+  123  kubectl get ns -L istio-injection
+  124  ls
+  125  kubectl get pods 
+  126  ls
+  127  kubectl apply -f helloworld.yaml 
+  128  kubectl get pods 
+  129  ls
+  130  kubectl  get pods 
+  131  ls
+  132  kubectl delete -f helloworld.yaml 
+  133  ls
+  134  vim helloworld.yaml 
+  135  history 
+  136  kubectl get ns -L istio-injection
+  137  lls
+  138  ls
+  139  kubectl  apply -f helloworld.yaml 
+  140  kubectl get deploy,svc,pods
+  141  ls
+  142  vim helloworld-gw.yaml 
+  143  ls
+  144  kubectl creaye -f helloworld-gw.yaml 
+  145  kubectl apply -f helloworld-gw.yaml 
+  146  kubectl get gateway
+  147  kubectl get vs
+  148  kubectl get virtualservice
+  149  kubectl get svc -n istio-system
+  150  kubectl get svc -n istio-system -l istio-ingressgateway
+  151  kubectl get svc -n istio-system -L istio-ingressgateway
+  152  ls
+  153  cp -rf ../../../old/kubernetes-project/istio/helloworld-v2.yaml . 
+  154  ls
+  155  vim helloworld-v2.yaml 
+  156  ls
+  157  vim helloworld-v2.yaml 
+  158  ls
+  159  kubectl create -f helloworld-v2.yaml 
+  160  kubectl get svc 
+  161  kubectl get pods 
+  162  curl http://34.72.132.220/hello
+  163  ls
+  164  cp -rf ../../../old/kubernetes-project/istio/helloworld-v2-routing.yaml . 
+  165  ls
+  166  vim helloworld-v2-routing.yaml 
+  167  ls
+  168  for ((i=1;i<=10;i++));do curl http://34.72.132.220/hello; done
+  169  ls
+  170  vim helloworld-v2-routing.yaml 
+  171  ls
+  172  kubectl apply helloworld-v2-routing.yaml 
+  173  kubectl apply-f helloworld-v2-routing.yaml 
+  174  kubectl apply -f helloworld-v2-routing.yaml 
+  175  for ((i=1;i<=10;i++));do curl http://34.72.132.220/hello; done
+  176  for ((i=1;i<=10;i++));do curl http://34.72.132.220/hello -H "host: hello.example.com"; done
+  177  for ((i=1;i<=10;i++));do curl http://34.72.132.220/hello -H "host: hello.example.com" -H "end-user: amit"; done
+  178  ls
+  179  cd ..
+  180  ls
+  181  cd ..
+  182  ls
+  183  history 
+  184  history > Day6_History.txt 

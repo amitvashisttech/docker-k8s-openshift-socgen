@@ -1,0 +1,743 @@
+    1  gcloud orginations list 
+    2  gcloud auth list
+    3  gcloud organizations list 
+    4  gcloud organizations --help
+    5  gcloud compute firewall-rules create allow-winrm --allow tcp:5986
+    6  export GOOGLE_CLOUD_PROJECT="k8s-terraform-demo-272708"
+    7  gcloud services enable --project "${GOOGLE_CLOUD_PROJECT}"     cloudresourcemanager.googleapis.com     iam.googleapis.com
+    8  gcloud iam service-accounts create vault-tester     --display-name vault-tester     --project "${GOOGLE_CLOUD_PROJECT}"
+    9  gcloud projects add-iam-policy-binding "${GOOGLE_CLOUD_PROJECT}"     --member "serviceAccount:vault-tester@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"     --role "roles/viewer"
+   10  gcloud projects add-iam-policy-binding "${GOOGLE_CLOUD_PROJECT}"     --member "serviceAccount:vault-tester@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"     --role "roles/iam.serviceAccountTokenCreator"
+   11  gcloud iam service-accounts keys create vault-tester.json     --iam-account "vault-tester@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"
+   12  cat vault-tester.json 
+   13  gcloud projects add-iam-policy-binding "${GOOGLE_CLOUD_PROJECT}"     --member "serviceAccount:vault-tester@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"     --role "roles/iam.serviceAccounts.create"
+   14  gcloud services enable cloudresourcemanager.googleapis.com
+   15  gcloud services enable cloudbilling.googleapis.com
+   16  gcloud services enable iam.googleapis.com
+   17  gcloud services enable compute.googleapis.com
+   18  gcloud services enable serviceusage.googleapis.com
+   19  gcloud container clusters get-credentials k8s-terraform-demo-272708-cluster --zone us-east1-b --project k8s-terraform-demo-272708
+   20  cat .kube/config 
+   21  kubect get nodes 
+   22  kubectl get nodes 
+   23  cat .kube/config 
+   24  ssh 10.128.0.2
+   25  gcloud compute --project k8s-demo-socgen --zone us-central1-a
+   26  gcloud beta compute ssh --zone "us-central1-a" "master" --project "k8s-demo-socgen"
+   27  gcloud  compute ssh --zone "us-central1-a" "master" --project "k8s-demo-socgen"
+   28  gcloud config set compute/region us-west1
+   29  gcloud config set compute/zone us-west1-c
+   30  wget -q --show-progress --https-only --timestamping   https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/linux/cfssl   https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/linux/cfssljson
+   31  chmod +x cfssl cfssljson
+   32  sudo mv cfssl cfssljson /usr/local/bin/
+   33  cfssl version
+   34  cfssljson --version
+   35  curl -o kubectl https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/darwin/amd64/kubectl
+   36  ls
+   37  rm -rf kubectl 
+   38  wget https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl
+   39  chmod +x kubectl
+   40  sudo mv kubectl /usr/local/bin/
+   41  kubectl version --client
+   42  gcloud compute networks create kubernetes-the-hard-way --subnet-mode custom
+   43  gcloud compute networks subnets create kubernetes   --network kubernetes-the-hard-way   --range 10.240.0.0/24
+   44  gcloud compute firewall-rules create kubernetes-the-hard-way-allow-internal   --allow tcp,udp,icmp   --network kubernetes-the-hard-way   --source-ranges 10.240.0.0/24,10.200.0.0/16
+   45  gcloud compute firewall-rules create kubernetes-the-hard-way-allow-external   --allow tcp:22,tcp:6443,icmp   --network kubernetes-the-hard-way   --source-ranges 0.0.0.0/0
+   46  gcloud compute firewall-rules list --filter="network:kubernetes-the-hard-way"
+   47  gcloud compute addresses create kubernetes-the-hard-way   --region $(gcloud config get-value compute/region)
+   48  gcloud compute addresses list --filter="name=('kubernetes-the-hard-way')"
+   49  for i in 0 1 2; do   gcloud compute instances create controller-${i}     --async     --boot-disk-size 200GB     --can-ip-forward     --image-family ubuntu-1804-lts     --image-project ubuntu-os-cloud     --machine-type n1-standard-1     --private-network-ip 10.240.0.1${i}     --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring     --subnet kubernetes     --tags kubernetes-the-hard-way,controller; done
+   50  for i in 0 1 2; do   gcloud compute instances create worker-${i}     --async     --boot-disk-size 200GB     --can-ip-forward     --image-family ubuntu-1804-lts     --image-project ubuntu-os-cloud     --machine-type n1-standard-1     --metadata pod-cidr=10.200.${i}.0/24     --private-network-ip 10.240.0.2${i}     --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring     --subnet kubernetes     --tags kubernetes-the-hard-way,worker; done
+   51  gcloud compute instances list
+   52  gcloud compute ssh controller-0
+   53  cat > ca-config.json <<EOF
+   54  {
+   55    "signing": {
+   56      "default": {
+   57        "expiry": "8760h"
+   58      },
+   59      "profiles": {
+   60        "kubernetes": {
+   61          "usages": ["signing", "key encipherment", "server auth", "client auth"],
+   62          "expiry": "8760h"
+   63        }
+   64      }
+   65    }
+   66  }
+   67  EOF
+   68  cat > ca-csr.json <<EOF
+   69  {
+   70    "CN": "Kubernetes",
+   71    "key": {
+   72      "algo": "rsa",
+   73      "size": 2048
+   74    },
+   75    "names": [
+   76      {
+   77        "C": "US",
+   78        "L": "Portland",
+   79        "O": "Kubernetes",
+   80        "OU": "CA",
+   81        "ST": "Oregon"
+   82      }
+   83    ]
+   84  }
+   85  EOF
+   86  ls
+   87  cat ca-config.json 
+   88  cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+   89  ls
+   90  ls -ltr 
+   91  cat > admin-csr.json <<EOF
+   92  {
+   93    "CN": "admin",
+   94    "key": {
+   95      "algo": "rsa",
+   96      "size": 2048
+   97    },
+   98    "names": [
+   99      {
+  100        "C": "US",
+  101        "L": "Portland",
+  102        "O": "system:masters",
+  103        "OU": "Kubernetes The Hard Way",
+  104        "ST": "Oregon"
+  105      }
+  106    ]
+  107  }
+  108  EOF
+  109  ls -ltr 
+  110  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   admin-csr.json | cfssljson -bare admin
+  111  ks
+  112  ls
+  113  ls -ltr 
+  114  for instance in worker-0 worker-1 worker-2; do
+  115  cat > ${instance}-csr.json <<EOF
+  116  {
+  117    "CN": "system:node:${instance}",
+  118    "key": {
+  119      "algo": "rsa",
+  120      "size": 2048
+  121    },
+  122    "names": [
+  123      {
+  124        "C": "US",
+  125        "L": "Portland",
+  126        "O": "system:nodes",
+  127        "OU": "Kubernetes The Hard Way",
+  128        "ST": "Oregon"
+  129      }
+  130    ]
+  131  }
+  132  EOF
+  133  for instance in worker-0 worker-1 worker-2; do
+  134  cat > ${instance}-csr.json <<EOF
+  135  {
+  136    "CN": "system:node:${instance}",
+  137    "key": {
+  138      "algo": "rsa",
+  139      "size": 2048
+  140    },
+  141    "names": [
+  142      {
+  143        "C": "US",
+  144        "L": "Portland",
+  145        "O": "system:nodes",
+  146        "OU": "Kubernetes The Hard Way",
+  147        "ST": "Oregon"
+  148      }
+  149    ]
+  150  }
+  151  EOF
+  152    EXTERNAL_IP=$(gcloud compute instances describe ${instance} \
+  153    --format 'value(networkInterfaces[0].accessConfigs[0].natIP)');  INTERNAL_IP=$(gcloud compute instances describe ${instance} \
+  154    --format 'value(networkInterfaces[0].networkIP)');  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -hostname=${instance},${EXTERNAL_IP},${INTERNAL_IP}   -profile=kubernetes   ${instance}-csr.json | cfssljson -bare ${instance}; done
+  155  ls
+  156  history 
+  157  gcloud compute instances list
+  158  cat > kube-controller-manager-csr.json <<EOF
+  159  {
+  160    "CN": "system:kube-controller-manager",
+  161    "key": {
+  162      "algo": "rsa",
+  163      "size": 2048
+  164    },
+  165    "names": [
+  166      {
+  167        "C": "US",
+  168        "L": "Portland",
+  169        "O": "system:kube-controller-manager",
+  170        "OU": "Kubernetes The Hard Way",
+  171        "ST": "Oregon"
+  172      }
+  173    ]
+  174  }
+  175  EOF
+  176  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+  177  cat > kube-controller-manager-csr.json <<EOF
+  178  {
+  179    "CN": "system:kube-controller-manager",
+  180    "key": {
+  181      "algo": "rsa",
+  182      "size": 2048
+  183    },
+  184    "names": [
+  185      {
+  186        "C": "US",
+  187        "L": "Portland",
+  188        "O": "system:kube-controller-manager",
+  189        "OU": "Kubernetes The Hard Way",
+  190        "ST": "Oregon"
+  191      }
+  192    ]
+  193  }
+  194  EOF
+  195  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+  196  ls
+  197  cat > kube-proxy-csr.json <<EOF
+  198  {
+  199    "CN": "system:kube-proxy",
+  200    "key": {
+  201      "algo": "rsa",
+  202      "size": 2048
+  203    },
+  204    "names": [
+  205      {
+  206        "C": "US",
+  207        "L": "Portland",
+  208        "O": "system:node-proxier",
+  209        "OU": "Kubernetes The Hard Way",
+  210        "ST": "Oregon"
+  211      }
+  212    ]
+  213  }
+  214  EOF
+  215  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   kube-proxy-csr.json | cfssljson -bare kube-proxy
+  216  cat > kube-scheduler-csr.json <<EOF
+  217  {
+  218    "CN": "system:kube-scheduler",
+  219    "key": {
+  220      "algo": "rsa",
+  221      "size": 2048
+  222    },
+  223    "names": [
+  224      {
+  225        "C": "US",
+  226        "L": "Portland",
+  227        "O": "system:kube-scheduler",
+  228        "OU": "Kubernetes The Hard Way",
+  229        "ST": "Oregon"
+  230      }
+  231    ]
+  232  }
+  233  EOF
+  234  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+  235  KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+  236    --region $(gcloud config get-value compute/region) \
+  237    --format 'value(address)')
+  238  KUBERNETES_HOSTNAMES=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local
+  239  cat > kubernetes-csr.json <<EOF
+  240  {
+  241    "CN": "kubernetes",
+  242    "key": {
+  243      "algo": "rsa",
+  244      "size": 2048
+  245    },
+  246    "names": [
+  247      {
+  248        "C": "US",
+  249        "L": "Portland",
+  250        "O": "Kubernetes",
+  251        "OU": "Kubernetes The Hard Way",
+  252        "ST": "Oregon"
+  253      }
+  254    ]
+  255  }
+  256  EOF
+  257  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,${KUBERNETES_HOSTNAMES}   -profile=kubernetes   kubernetes-csr.json | cfssljson -bare kubernetes
+  258  cat > service-account-csr.json <<EOF
+  259  {
+  260    "CN": "service-accounts",
+  261    "key": {
+  262      "algo": "rsa",
+  263      "size": 2048
+  264    },
+  265    "names": [
+  266      {
+  267        "C": "US",
+  268        "L": "Portland",
+  269        "O": "Kubernetes",
+  270        "OU": "Kubernetes The Hard Way",
+  271        "ST": "Oregon"
+  272      }
+  273    ]
+  274  }
+  275  EOF
+  276  cfssl gencert   -ca=ca.pem   -ca-key=ca-key.pem   -config=ca-config.json   -profile=kubernetes   service-account-csr.json | cfssljson -bare service-account
+  277  for instance in worker-0 worker-1 worker-2; do   gcloud compute scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:~/; done
+  278  for instance in controller-0 controller-1 controller-2; do   gcloud compute scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem     service-account-key.pem service-account.pem ${instance}:~/; done
+  279  KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+  280    --region $(gcloud config get-value compute/region) \
+  281    --format 'value(address)')
+  282  for instance in worker-0 worker-1 worker-2; do   kubectl config set-cluster kubernetes-the-hard-way     --certificate-authority=ca.pem     --embed-certs=true     --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443     --kubeconfig=${instance}.kubeconfig;    kubectl config set-credentials system:node:${instance}     --client-certificate=${instance}.pem     --client-key=${instance}-key.pem     --embed-certs=true     --kubeconfig=${instance}.kubeconfig;    kubectl config set-context default     --cluster=kubernetes-the-hard-way     --user=system:node:${instance}     --kubeconfig=${instance}.kubeconfig;    kubectl config use-context default --kubeconfig=${instance}.kubeconfig; done
+  283  ls -ltr 
+  284  cat worker-0.kubeconfig 
+  285  ls
+  286  kubectl config set-cluster kubernetes-the-hard-way     --certificate-authority=ca.pem     --embed-certs=true     --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443     --kubeconfig=kube-proxy.kubeconfig
+  287  kubectl config set-context default     --cluster=kubernetes-the-hard-way     --user=system:kube-proxy     --kubeconfig=kube-proxy.kubeconfig
+  288  kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+  289  kubectl get nodes 
+  290  ls
+  291  ls -ltr 
+  292  cat kube-proxy.kubeconfig 
+  293  ls
+  294  kubectl config set-cluster kubernetes-the-hard-way     --certificate-authority=ca.pem     --embed-certs=true     --server=https://127.0.0.1:6443     --kubeconfig=kube-controller-manager.kubeconfig
+  295  kubectl config set-credentials system:kube-controller-manager     --client-certificate=kube-controller-manager.pem     --client-key=kube-controller-manager-key.pem     --embed-certs=true     --kubeconfig=kube-controller-manager.kubeconfig
+  296  kubectl config set-context default     --cluster=kubernetes-the-hard-way     --user=system:kube-controller-manager     --kubeconfig=kube-controller-manager.kubeconfig
+  297  kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig
+  298  kubectl config set-cluster kubernetes-the-hard-way     --certificate-authority=ca.pem     --embed-certs=true     --server=https://127.0.0.1:6443     --kubeconfig=kube-scheduler.kubeconfig
+  299  kubectl config set-credentials system:kube-scheduler     --client-certificate=kube-scheduler.pem     --client-key=kube-scheduler-key.pem     --embed-certs=true     --kubeconfig=kube-scheduler.kubeconfig
+  300  kubectl config set-context default     --cluster=kubernetes-the-hard-way     --user=system:kube-scheduler     --kubeconfig=kube-scheduler.kubeconfig
+  301  kubectl config use-context default --kubeconfig=kube-scheduler.kubeconfig
+  302  kubectl config set-credentials admin     --client-certificate=admin.pem     --client-key=admin-key.pem     --embed-certs=true     --kubeconfig=admin.kubeconfig
+  303  kubectl config set-context default     --cluster=kubernetes-the-hard-way     --user=admin     --kubeconfig=admin.kubeconfig
+  304  kubectl config use-context default --kubeconfig=admin.kubeconfig
+  305  for instance in worker-0 worker-1 worker-2; do   gcloud compute scp ${instance}.kubeconfig kube-proxy.kubeconfig ${instance}:~/; done
+  306  for instance in controller-0 controller-1 controller-2; do   gcloud compute scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ${instance}:~/; done
+  307  ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
+  308  cat > encryption-config.yaml <<EOF
+  309  kind: EncryptionConfig
+  310  apiVersion: v1
+  311  resources:
+  312    - resources:
+  313        - secrets
+  314      providers:
+  315        - aescbc:
+  316            keys:
+  317              - name: key1
+  318                secret: ${ENCRYPTION_KEY}
+  319        - identity: {}
+  320  EOF
+  321  for instance in controller-0 controller-1 controller-2; do   gcloud compute scp encryption-config.yaml ${instance}:~/; done
+  322  tmux gcloud compute ssh controller-0
+  323  tmux 
+  324  gcloud compute ssh controller-2
+  325  gcloud compute ssh controller-0
+  326  gcloud compute ssh controller-1
+  327  ls
+  328  rm -rf * 
+  329  ls
+  330  gcloud container clusters get-credentials k8s-demo --zone us-central1-c --project cool-beanbag-272708
+  331  ls
+  332  ls -a 
+  333  cat .kube/config 
+  334  kubectl get pods 
+  335  kubectl get nodes 
+  336  git clone https://github.com/amitvashisttech/docker-k8s-openshift-socgen.git
+  337  ls
+  338  cd docker-k8s-openshift-socgen/
+  339  ls
+  340  cd K8s/
+  341  ls
+  342  cd 04-Deployment/
+  343  ls
+  344  kubectl  create -f helloworld.yml 
+  345  kubectl get pods 
+  346  ls
+  347  git clone https://github.com/amitvashisttech/k8s-docker-vmware_15April2020.git
+  348  ls
+  349  mv k8s-docker-vmware_15April2020 ../../../
+  350  ls
+  351  cd ..
+  352  c d..
+  353  lcd ..
+  354  cd 
+  355  ls
+  356  cat /etc/os-release 
+  357  ls
+  358  cp -rf k8s-docker-vmware_15April2020/K8s/06-App-with-Service docker-k8s-openshift-socgen/K8s/05-App-with-Service
+  359  ls
+  360  cd docker-k8s-openshift-socgen/
+  361  ls
+  362  cd K8s/
+  363  ls
+  364  cd 05-App-with-Service/
+  365  ls
+  366  kubectl get pods 
+  367  kubectl get deploy
+  368  kubectl delete deploy helloworld-deployment
+  369  ls
+  370  cat helloworld.yml 
+  371  ls
+  372  cat helloworld-tomcat.yaml 
+  373  ls
+  374  cat helloworld-service.yml 
+  375  ls
+  376  cat helloworld-nodeport-service.yml 
+  377  kubectl get svc 
+  378  kubectl get nodes -o wide 
+  379  ls
+  380  cd 
+  381  history 
+  382  ls
+  383  cd docker-k8s-openshift-socgen/K8s/05-App-with-Service/
+  384  ls
+  385  kubectl get pods 
+  386  ls
+  387  cat helloworld.yml 
+  388  kubectl create -f helloworld.yml 
+  389  kubectl get pods 
+  390  ls
+  391  cat helloworld-service.yml 
+  392  ls
+  393  kubectl get svc 
+  394  kubectl  create -f helloworld-service.yml
+  395  kubectl get svc 
+  396  curl 35.225.251.97
+  397  kubectl describe helloworld-service
+  398  kubectl describe svc helloworld-service
+  399  ls
+  400  cat helloworld-tomcat.yaml 
+  401  kubectl create -f helloworld-tomcat.yaml 
+  402  kubectl get svc 
+  403  kubectl get pods 
+  404  ls
+  405  cat helloworld-nodeport-service.yml 
+  406  ls
+  407  cat helloworld-tomcat.yaml 
+  408  ls
+  409  kubectl describe svc helloworld-service
+  410  ls
+  411  kubectl delete svc helloworld-service
+  412  kubectl get svc 
+  413  ls
+  414  kubectl create -f helloworld-nodeport-service.yml 
+  415  ls
+  416  kubectl get svc 
+  417  kubectl get pods 
+  418  kubectl get pods -o wide 
+  419  kubectl get nodes  -o wide 
+  420  curl 34.69.159.183:31001
+  421  curl 10.128.0.11:31001
+  422  ip addr 
+  423  curl 10.128.0.11:31001
+  424  ls
+  425  kubectl get svc 
+  426  kubectl run -it busybox --image=busybox:1.28 --restart=Never -- sh 
+  427  curl 10.128.0.11:31001
+  428  kubectl get svc 
+  429  kubectl run -it busybox-1 --image=ubuntu:16.04 --restart=Never -- /bin/bash
+  430  curl 10.0.6.79:31005
+  431  ls
+  432  cat helloworld.yml 
+  433  ls
+  434  cd ..
+  435  ls
+  436  cd ..
+  437  ls
+  438  history 
+  439  vim Day3_History.txt 
+  440  ls
+  441  git add . ; git commit -m "K8s-Service"
+  442  git config --global user.email "amitvashist7@outlook.com"
+  443  git config --global user.name "Amit Vashist"
+  444  git add . ; git commit -m "K8s-Service"
+  445  git push 
+  446  ls
+  447  cd 
+  448  ls
+  449  cd k8s-docker-vmware_15April2020/
+  450  ls
+  451  cd K8s/
+  452  ls
+  453  cd ..
+  454  ls
+  455  cd ..
+  456  ls
+  457  cd k8s-docker-vmware_15April2020/
+  458  ls
+  459  cd K8s/
+  460  ls
+  461  cd 
+  462  ls
+  463  cd docker-k8s-openshift-socgen/
+  464  ls
+  465  cd K8s/
+  466  ls
+  467  cp -rf ../../k8s-docker-vmware_15April2020/K8s/07-Labels 06-Labels
+  468  cp -rf ../../k8s-docker-vmware_15April2020/K8s/08-HealthCheck 07-HealthChecks 
+  469  ls
+  470  cd 07-HealthChecks/
+  471  ls
+  472  cat helloworld-healthcheck.yml 
+  473  ls
+  474  cd ..
+  475  ls
+  476  cd 07-HealthChecks/
+  477  ls
+  478  cp -rf helloworld-healthcheck.yml helloworld-healthcheck-exec.yml 
+  479  mv helloworld-healthcheck.yml helloworld-healthcheck-http.yml
+  480  ls
+  481  vim helloworld-healthcheck-exec.yml 
+  482  ls
+  483  cd ..
+  484  ls
+  485  kubectl get nodes 
+  486  kubectl get nodes --shw-labels
+  487  kubectl get nodes --show-labels
+  488  ls
+  489  cd 06-Labels/
+  490  ls
+  491  vim helloworld-nodeselector.yml 
+  492  ls
+  493  cat helloworld-nodeselector_1.yml 
+  494  ls
+  495  kubect create -f helloworld-nodeselector_1.yml 
+  496  kubectl create -f helloworld-nodeselector_1.yml 
+  497  kubectl get pods 
+  498  kubectl delete busybox busybox-1 nodehelloworld                           nodehelloworld-tomcat
+  499  kubectl get pods 
+  500  kubectl delete pod --all
+  501  kubectl get pods 
+  502  kubectl describe pod helloworld-deployment-658d449cdf-6tmzt
+  503  ls
+  504  kubectl create -f helloworld-nodeselector.yml 
+  505  kubectl get pods 
+  506  cat helloworld-nodeselector_1.yml 
+  507  kubect get nodes 
+  508  kubectl get nodes 
+  509  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a-1gf4 hardware=virtual 
+  510  kubectl get pods 
+  511  kubectl get pods -o wide 
+  512  kubectl get nodes 
+  513  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a- hardware=virtual 
+  514  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a-5x2p hardware=virtual 
+  515  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a-v65k hardware=virtual 
+  516  kubectl get pods -o wide 
+  517  kubectl scale --replicas=5 deploy helloworld-deployment 
+  518  kubectl get pods -o wide 
+  519  ls
+  520  cat helloworld-nodeselector.yml 
+  521  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a-5x2p env=prod
+  522  kubectl get pods -o wide 
+  523  kubectl label nodes gke-k8s-demo-default-pool-d4631e8a-5x2p env-
+  524  kubectl get pods -o wide 
+  525  kubectl scale --replicas=5 deploy helloworld-deployment-2
+  526  kubectl get pods -o wide 
+  527  ls
+  528  kubectl delete -f helloworld-nodeselector* 
+  529  kubectl delete -f helloworld-nodeselector_1.yml 
+  530  kubectl delete -f helloworld-nodeselector.yml 
+  531  ls
+  532  kubectl get pods 
+  533  cd ..
+  534  ls
+  535  cd 07-HealthChecks/
+  536  ls
+  537  vim helloworld-healthcheck-exec.yml 
+  538  ls
+  539  cd ..
+  540  ls
+  541  kubectl craete -f 07-HealthChecks/
+  542  kubectl create -f 07-HealthChecks/
+  543  ls
+  544  cd 07-HealthChecks/
+  545  ls
+  546  vim helloworld-healthcheck-http.yml 
+  547  kubectl get pods 
+  548  kubectl describe pod helloworld-deployment-69854649cf-285bc
+  549  ls
+  550  kubectl edit deploy helloworld-deployment
+  551  kubectl get pods 
+  552  ls
+  553  vim helloworld-healthcheck-exec.yml 
+  554  kubectl get pods 
+  555  kubectl describe pod liveness-exec
+  556  kubectl get pods 
+  557  kubectl describe pod helloworld-deployment-dd6f4f694-472zt
+  558  ls
+  559  kubectl edit deploy helloworld-deployment
+  560  kubectl get pods 
+  561  cd ..
+  562  lls
+  563  cd ..
+  564  ls
+  565  git add . ; git commit -m "K8s-Service"; git push 
+  566  ls
+  567  history 
+  568  ls
+  569  history >> Day3_History.txt 
+  570  git add . ; git commit -m "K8s-Service"; git push 
+  571  ls
+  572  kubectl get pods 
+  573  kubectl delete deploy helloworld-deployment
+  574  ls
+  575  kubectl get pods 
+  576  kubectl delete pod liveness-exec
+  577  ls
+  578  cd docker-k8s-openshift-socgen/K8s/
+  579  ls
+  580  cp -rf ../../k8s-docker-vmware_15April2020/K8s/09-Secrets 08-Secrets
+  581  ls
+  582  cd 08-Secrets/
+  583  ls
+  584  cat helloworld-secrets.yml 
+  585  echo -n "root" | base64
+  586  echo -n "password" | base64
+  587  kubectl get secrets
+  588  kubectl  create -f helloworld-secrets.yml 
+  589  kubectl get secrets
+  590  ls
+  591  vim helloworld-secrets-volumes.yml 
+  592  vim helloworld-secrets-volumes.yml ls
+  593  ls
+  594  kubectl create -f helloworld-secrets-volumes.yml 
+  595  kubectl get deployments 
+  596  kubectl get pods 
+  597  kubectl describe pods helloworld-deployment-69ffd7d66c-48tvr 
+  598  ls
+  599  kubectl exec -it helloworld-deployment-69ffd7d66c-48tvr -- sh 
+  600  ls
+  601  cd ..
+  602  ls
+  603  cd ..
+  604  ls
+  605  git add . ; git commit -m "Secrets"; git push 
+  606  ls
+  607  cd K8s/
+  608  ls
+  609  cp -rf ../../k8s-docker-vmware_15April2020/K8s/10-Wordpress 09-Wordpress
+  610  ls
+  611  cd 09-Wordpress/
+  612  ls
+  613  kubectl get pods 
+  614  kubectl delete --all 
+  615  kubectl delete deploy --all 
+  616  ls
+  617  history 
+  618  lls
+  619  cd 
+  620  ls
+  621  kubectl run --restart=Never --image=busybox static-busybox --dry-run -o yaml -- sleep 1000 > static-busybox.ymal
+  622  ls
+  623  cat static-busybox.ymal 
+  624  ls
+  625  cd docker-k8s-openshift-socgen/K8s/
+  626  ls
+  627  cd 09-Wordpress/
+  628  ls
+  629  vim wordpress-secrets.yml 
+  630  ls
+  631  vim wordpress-single-deployment-no-volumes.yml 
+  632  ls
+  633  cat wordpress-service.yml 
+  634  ls
+  635  cd ..
+  636  ls
+  637  kubectl create -f 09-Wordpress/
+  638  kubectl  get svc 
+  639  kubectl delete svc helloworld-service
+  640  kubectl create -f 09-Wordpress/
+  641  kubectl  get pods 
+  642  kubectl  describe pod wordpress-deployment-5668fcbb4b-gnxqg
+  643  kubectl get svc 
+  644  kubectl  edit svc wordpress-service
+  645  kubectl get svc 
+  646  ls
+  647  kubectl  get pods 
+  648  kubectl exec -it wordpress-deployment-5668fcbb4b-gnxqg -c mysql -- /bin/bash
+  649  kubectl get pods 
+  650  ls
+  651  cd 09-Wordpress/
+  652  ls
+  653  vim wordpress-single-deployment-no-volumes.yml 
+  654  ls
+  655  cd ..
+  656  ls
+  657  cd ..
+  658  ls
+  659  history > Day3_History.txt 
+  660  ls
+  661  git add . ; git commit -m "09-Wordpress"; git push 
+  662  ls
+  663  cd K8s/
+  664  ls
+  665  kubectl delete -f 09-Wordpress/
+  666  ls
+  667  cd 08-Secrets/
+  668  ls
+  669  vim helloworld-secrets-volumes.yml 
+  670  kubectl create -f helloworld-secrets-volumes.yml 
+  671  kubectl get pods 
+  672  kubectl exec -it helloworld-deployment-697b5f84dd-fxch5 -- sh
+  673  ls
+  674  cd ..
+  675  ls
+  676  cd 09-Wordpress/
+  677  ls
+  678  cat wordpress-secrets.yml 
+  679  kubectl get svc 
+  680  ls
+  681  cd ..
+  682  ls
+  683  cd 08-Secrets/
+  684  ls
+  685  cd ..
+  686  ls
+  687  cp -rf ../../k8s-docker-vmware_15April2020/K8s/11-ConfigMap 10-ConfigMap
+  688  ls
+  689  cd 10-ConfigMap/
+  690  ls
+  691  kubectl get pods 
+  692  kubectl delete deploy helloworld-deployment
+  693  kubectl get pods 
+  694  kubectl get svc 
+  695  ls
+  696  cat reverseproxy.conf 
+  697  ls
+  698  cat nginx.yml 
+  699  ls
+  700  cat nginx.yml 
+  701  ls
+  702  cat nginx-service.yml 
+  703  ls
+  704  kubectl create configmap nginx-config --from-file=reverseproxy.conf --dry-run
+  705  kubectl create configmap nginx-config --from-file=reverseproxy.conf --dry-run > 1.yaml
+  706  ls
+  707  cat 1.yaml 
+  708  ls
+  709  rm 1.yaml 
+  710  ls
+  711  cat reverseproxy.conf 
+  712  ls
+  713  kubectl create configmap nginx-config --from-file=reverseproxy.conf
+  714  kubectl get configmap
+  715  kubectl describe configmap nginx-config
+  716  ls
+  717  cd ..
+  718  ls
+  719  kubectl create -f 10-ConfigMap/
+  720  kubectl  get pods 
+  721  kubectl get svc 
+  722  kubectl edit svc helloworld-nginx-service
+  723  kubectl get svc 
+  724  ls
+  725  kubectl describe configmap nginx-config
+  726  ls
+  727  cd 10-ConfigMap/
+  728  ls
+  729  kubectl get svc 
+  730  ls
+  731  kubectl edit configmap nginx-config
+  732  kubectl get pods 
+  733  kubectl exec -it helloworld-nginx -c nginx -- sh 
+  734  ls
+  735  kubectl get pods 
+  736  kubectl edit configmap nginx-config
+  737  kubectl exec -it helloworld-nginx -c nginx -- bash
+  738  ls
+  739  cd ..
+  740  ls
+  741  cd ..
+  742  ls
+  743  history > Day3_History.txt 
