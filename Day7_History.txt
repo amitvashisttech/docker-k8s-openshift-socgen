@@ -38,3 +38,53 @@
   151  history | 20
   152  history 20
   153  history 20 >> Day7_History.txt 
+  155  oc get nodes
+  156  oc login -u system:admin 
+  157  oc get nodes 
+  158  oc get pods 
+  159  oc get pods --all-namespaces
+  160  oc login -u developer -p openshift 
+  161  docker images 
+  162  oc get is 
+  163  docker images 
+  164  oc get is 
+  165  oc import-image amitvashist7/blog-django-py
+  166  oc get is 
+  167  history 
+  168  oc new-app blog-django-py --name myblog-orange --env BLOG_BANNER_COLOR=orange
+  169  oc get is 
+  170  oc get svc 
+  171  oc edit svc myblog-orange
+  172  oc get svc 
+  173  history 
+  174  history 20 >> Day7_History.txt 
+  170  oc get svc 
+  171  oc edit svc myblog-orange
+  172  oc get svc 
+  173  history 
+  174  history 20 >> Day7_History.txt 
+  175  ls
+  176  oc get users
+  177  oc login -u system:admin
+  178  oc get user
+  179  oc get users
+  180  oc get identity
+  181  oc run openshift-tiny-web --image=amitvashist7/k8s-tiny-web
+  182  oc get pods 
+  183  oc logs openshift-tiny-web-1-jv7mw
+  184  oc adm 
+  185  oc adm policy 
+  186  oc adm policy add-scc-to-user anyuid -Z default
+  187  oc adm policy add-scc-to-user anyuid -z default
+  188  oc get pods 
+  189  oc delete pod openshift-tiny-web-1-jv7mw
+  190  oc get pods 
+  191  oc logs openshift-tiny-web-1-r6ncs
+  192  oc get dc 
+  193  oc expose dc openshift-tiny-web --port=80
+  194  oc edit svc openshift-tiny-web
+  195  ls
+  196  oc get pods 
+  197  oc get svc 
+  198  history 
+  199  history 30 >> Day7_History.txt 
