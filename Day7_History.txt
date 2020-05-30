@@ -1,0 +1,20 @@
+  109  oc get all -l app=myblog
+  110  oc delete all -l app=myblog
+  111  oc run openshift-get-started --image=amitvashist7/k8s-tiny-web
+  112  oc get dc 
+  113  oc get rc 
+  114  oc get pods 
+  115  oc log openshift-get-started-1-rgm7p
+  116  oc delete dc openshift-get-started
+  117  oc get dc,pod,rc
+  118  oc new-app amitvashist7/blog-django-py --name myblog
+  119  oc status
+  120  oc get all -l app=myblog
+  121  oc get svc 
+  122  oc edit svc myblog    
+  123  oc get svc 
+  124  ls
+  125  history 
+  126  history 10
+  127  history 20
+  128  history 20 > Day7_History.txt
