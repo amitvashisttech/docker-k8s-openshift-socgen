@@ -65,5 +65,4 @@ PublicIp  Fqdn
 
 ## Now you can access openshift console from you browser
 <img 
-src="./Openshift-Login.PNG"
->
+src="./Openshift-Login.PNG" >
