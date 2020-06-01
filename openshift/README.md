@@ -2,11 +2,11 @@
 
 ## For the Setup we'll be Required the follwing:
 - GCP Account 
-- Provsion the firewall rule to open the following ports
+- Provision the firewall rule to open the following ports
   - Port 80, 443
   - Port 8443, 6443
   - Port Range 30000 - 33000
-- Now provion the VM 
+- Now proivion the VM 
   - Name : Openshift
   - Image: Ubuntu:18.04
   - Type : n2-standard or 2vCPU & 8 GB RAM Instance
